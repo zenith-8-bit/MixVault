@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>MixVault</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-capture" viewBox="0 0 24 24"><path d="M4 10v4M8 6v12M12 3v18M16 7v10M20 10v4"/></symbol>
+  <symbol id="i-library" viewBox="0 0 24 24"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12M10 11v5M14 11v5"/></symbol>
+  <symbol id="i-export" viewBox="0 0 24 24"><path d="M12 4v11M8 11l4 4 4-4M5 19h14"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3 10 14M21 3l-7 18-4-7-7-4 18-7Z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 4 2.5 20h19L12 4ZM12 10v4M12 17h.01"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 5v6h-6"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+</svg>
+
+<div class="bg"><i class="b1"></i><i class="b2"></i><i class="b3"></i></div>
+
+<div class="app">
+  <header>
+    <div class="brand"><span class="app-tile"><svg class="ic"><use href="#i-capture"/></svg></span>MixVault</div>
+    <nav id="tabs" class="seg" style="--n:3" hidden>
+      <button data-v="capture"><svg class="ic"><use href="#i-capture"/></svg>Capture</button>
+      <button data-v="library"><svg class="ic"><use href="#i-library"/></svg>Library</button>
+      <button data-v="settings"><svg class="ic"><use href="#i-settings"/></svg>Settings</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="onboard" class="view" hidden>
+      <div class="welcome">
+        <span class="app-tile big"><svg class="ic"><use href="#i-capture"/></svg></span>
+        <h1 class="large">Welcome to MixVault</h1>
+        <p class="lead">Capture any YouTube mix into a library you can search later, and add it to Spotify whenever you like.</p>
+      </div>
+      <p class="sec">How should songs reach Spotify?</p>
+      <div class="seg method wide" style="--n:2"><button data-m="direct">Direct</button><button data-m="api">API</button></div>
+      <p class="hint direct-only">Direct uses your signed-in Spotify tab to create the playlist and add each song. No developer app needed.</p>
+      <div class="card api-only" hidden>
+        <div class="cell"><div class="rt"><small>Spotify Client ID</small><input id="ob-client" class="plain" autocomplete="off" placeholder="from developer.spotify.com/dashboard"></div></div>
+        <div class="cell"><div class="rt"><small>Redirect URI (add it to your Spotify app)</small><code class="redirect"></code></div></div>
+      </div>
+      <button class="btn primary block" id="ob-go">Continue</button>
+    </section>
+
+    <section id="capture" class="view" hidden>
+      <h1 class="large">Capture</h1>
+      <div class="card">
+        <div class="cell"><span class="dot" id="src-dot"></span><div class="rt"><small>Detected mix</small><b id="src-text">Looking…</b></div>
+          <button class="icon-btn" id="rescan" title="Rescan tabs"><svg class="ic"><use href="#i-refresh"/></svg></button></div>
+        <div class="cell"><div class="rt"><small>Playlist name</small><input id="pname" class="plain" placeholder="Use the mix title"></div></div>
+        <div class="cell"><div class="rt"><b>Songs to capture</b></div>
+          <div class="stepper"><button data-d="-10">−</button><input id="max" type="number" min="1" max="500" value="100"><button data-d="10">+</button></div></div>
+      </div>
+      <button class="btn primary block" id="go"><svg class="ic"><use href="#i-capture"/></svg>Capture this mix</button>
+      <p class="status" id="cap"></p>
+      <p class="hint">Keep the YouTube window visible while capturing so the whole list can load.</p>
+    </section>
+
+    <section id="library" class="view" hidden>
+      <div id="lib-list">
+        <h1 class="large">Library</h1>
+        <label class="search"><svg class="ic"><use href="#i-search"/></svg><input id="q" placeholder="Search songs, artists, playlists"></label>
+        <div id="lib"></div>
+      </div>
+      <div id="lib-detail" hidden></div>
+    </section>
+
+    <section id="settings" class="view" hidden>
+      <h1 class="large">Settings</h1>
+      <p class="sec">Add playlists to Spotify</p>
+      <div class="seg method wide" style="--n:2"><button data-m="direct">Direct</button><button data-m="api">API</button></div>
+      <p class="hint direct-only">Direct creates the playlist in your signed-in Spotify tab, searches each song and adds the first result, checking every step.</p>
+      <div class="card api-only" hidden>
+        <div class="cell"><div class="rt"><small>Spotify Client ID</small><input id="clientId" class="plain" autocomplete="off"></div></div>
+        <div class="cell"><div class="rt"><small>Redirect URI</small><code class="redirect"></code></div></div>
+        <div class="cell"><button class="btn" id="st-reset">Reset Spotify login</button></div>
+      </div>
+      <p class="sec">Capture</p>
+      <div class="card"><div class="cell"><div class="rt"><b>Default song limit</b></div>
+        <div class="stepper"><button data-d="-10">−</button><input id="st-max" type="number" min="1" max="500"><button data-d="10">+</button></div></div></div>
+    </section>
+  </main>
+
+  <div id="sheet" class="sheet"><div class="panel">
+    <div class="grab"></div>
+    <h2 id="sh-title">Adding to Spotify</h2>
+    <p class="hint" id="sh-sub"></p>
+    <div class="bar"><i id="sh-bar"></i></div>
+    <ul id="sh-steps" class="steps"></ul>
+    <p class="status" id="sh-sum"></p>
+    <div class="actions">
+      <a id="sh-open" class="btn" target="_blank" hidden><svg class="ic"><use href="#i-link"/></svg>Open playlist</a>
+      <button class="btn primary" id="sh-main">Cancel</button>
+    </div>
+  </div></div>
+
+  <div id="toasts"></div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
