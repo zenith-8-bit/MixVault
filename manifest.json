@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "MixVault",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Capture YouTube mixes into a searchable library and add them to Spotify.",
   "icons": { "16": "icons/16.png", "32": "icons/32.png", "48": "icons/48.png", "128": "icons/128.png" },
   "permissions": ["identity", "storage", "unlimitedStorage", "scripting"],
